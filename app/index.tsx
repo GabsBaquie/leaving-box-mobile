@@ -1,10 +1,8 @@
 import { Image, StyleSheet } from "react-native";
 
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import HomeRole from "@/components/unique/HomeRole";
-import { Link } from "expo-router";
+import HomeAgent from "@/components/unique/HomeAgent";
+import HomeOperator from "@/components/unique/HomeOperator";
 
 export default function HomeScreen() {
   return (
@@ -14,14 +12,24 @@ export default function HomeScreen() {
         source={require("@/assets/images/homePageLogo.png")}
         style={styles.mainLogo}
       />
+      <Image
+        resizeMode="contain"
+        source={require("@/assets/images/agentBG.png")}
+        style={styles.agentBackground}
+      />
+      <Image
+        resizeMode="contain"
+        source={require("@/assets/images/opBG.png")}
+        style={styles.operatorBackground}
+      />
+      <Image
+        source={require("@/assets/images/homeLightning.png")}
+        style={styles.lightBackground}
+      />
 
       <ThemedView style={styles.mainContainer}>
-        <HomeRole type="agent" navLink="/agent/dificulty">
-          Agent
-        </HomeRole>
-        <HomeRole type="operator" navLink="/operator">
-          Operator
-        </HomeRole>
+        <HomeAgent navLink="/agent/dificulty" />
+        <HomeOperator navLink={"/operator"} />
       </ThemedView>
     </ThemedView>
   );
@@ -29,17 +37,36 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   mainLogo: {
-    zIndex: 1000,
+    zIndex: 100,
     width: "80%",
-    top: 30,
+    top: 10,
     alignSelf: "center",
     position: "absolute",
   },
+  agentBackground: {
+    position: "absolute",
+    top: 0,
+    // width: "100%",
+    zIndex: 1,
+  },
+  operatorBackground: {
+    position: "absolute",
+    bottom: 0,
+    // width: "100%",
+    zIndex: 9,
+  },
+  lightBackground: {
+    position: "absolute",
+    bottom: 175,
+    alignSelf: "center",
+    width: "110%",
+    zIndex: 9,
+    transform: [{ rotate: "1deg" }],
+  },
 
   mainContainer: {
-    // backgroundColor: "green",
-    flexDirection: "row",
     flex: 1,
-    position: "relative",
+    maxHeight: "100%",
+    flexDirection: "column",
   },
 });
