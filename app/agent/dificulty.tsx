@@ -15,23 +15,29 @@ export default function DificultyScreen() {
        />
 
       <View style={styles.linkContainer}>
-        <Link href={"/"} style={[styles.navStyle, { backgroundColor: "green" }]}>
+        <Link href={"/"} style={[styles.Btn, styles.BtnDifficulty, { backgroundColor: "green" }]}>
           Easy
         </Link>
 
-        <Link href={"/"} style={[styles.navStyle, { backgroundColor: "orange" }]}>
+        <Link href={"/"} style={[styles.Btn, styles.BtnDifficulty, { backgroundColor: "orange" }]}>
           Medium
         </Link>
 
-        <Link href={"/"} style={[styles.navStyle, { backgroundColor: "red" }]}>
+        <Link href={"/"} style={[styles.Btn, styles.BtnDifficulty, { backgroundColor: "red" }]}>
 
           Hard
         </Link>
       </View>
 
-      <Link href={"/"} style={styles.navStyle}>
-          Back
+      <View style={styles.linkContainer}>
+      <Link href={"/"} style={[styles.Btn, { padding: 10, backgroundColor: "gainsboro" }]}>
+          Home
         </Link>
+        <Link href={"/"} style={[styles.Btn, { padding: 10, backgroundColor: "gainsboro" }]}>
+          Next
+        </Link>
+      </View>
+
     </ParallaxScrollView>
   );
 }
@@ -39,18 +45,23 @@ export default function DificultyScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 24,
+    backgroundColor: "red",
   },
 
   linkContainer: {
-    padding: 24,
+    paddingTop: 24,
+    margin: "auto",
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
   },
 
-  navStyle: {
+  Btn: {
     fontSize: 20,
     fontWeight: "bold",
-    padding: 10,
   },
+
+  BtnDifficulty: {
+    padding: 32,
+  }
 });
