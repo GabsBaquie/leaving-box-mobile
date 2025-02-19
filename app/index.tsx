@@ -1,31 +1,35 @@
 import { Image, StyleSheet } from "react-native";
 
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import HomeRole from "@/components/unique/HomeRole";
-import { Link } from "expo-router";
+import HomeAgent from "@/components/unique/HomeAgent";
+import HomeOperator from "@/components/unique/HomeOperator";
 
 export default function HomeScreen() {
   return (
     <ThemedView style={{ flex: 1 }}>
-      {/* <ThemedView style={styles.mainLogoContainer}> */}
       <Image
         resizeMode="contain"
         source={require("@/assets/images/homePageLogo.png")}
         style={styles.mainLogo}
       />
-      {/* </ThemedView> */}
+      <Image
+        resizeMode="contain"
+        source={require("@/assets/images/agentBG.png")}
+        style={styles.agentBackground}
+      />
+      <Image
+        resizeMode="contain"
+        source={require("@/assets/images/opBG.png")}
+        style={styles.operatorBackground}
+      />
+      <Image
+        source={require("@/assets/images/homeLightning.png")}
+        style={styles.lightBackground}
+      />
 
       <ThemedView style={styles.mainContainer}>
-        <Link
-          href={"/agent/dificulty"}
-          style={{ flex: 1, flexDirection: "column" }}
-        >
-          <HomeRole type="Agent">Agent</HomeRole>
-        </Link>
-        {/* <ThemedView style={styles.separation} /> */}
-        <HomeRole type="Operator">Operator</HomeRole>
+        <HomeAgent navLink="/agent/dificulty" />
+        <HomeOperator navLink="/operator" />
       </ThemedView>
     </ThemedView>
   );
@@ -33,23 +37,36 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   mainLogo: {
-    zIndex: 1000,
+    zIndex: 100,
     width: "80%",
-    top: 50,
+    top: 10,
     alignSelf: "center",
     position: "absolute",
   },
-
-  mainContainer: {
-    backgroundColor: "green",
-    flexDirection: "row",
-    flex: 1,
-    zIndex: 0,
+  agentBackground: {
+    position: "absolute",
+    top: 0,
+    // width: "100%",
+    zIndex: 1,
+  },
+  operatorBackground: {
+    position: "absolute",
+    bottom: 0,
+    // width: "100%",
+    zIndex: 9,
+  },
+  lightBackground: {
+    position: "absolute",
+    bottom: 175,
+    alignSelf: "center",
+    width: "110%",
+    zIndex: 9,
+    transform: [{ rotate: "1deg" }],
   },
 
-  separation: {
-    width: 2,
-    height: "100%",
-    backgroundColor: "yellow",
+  mainContainer: {
+    flex: 1,
+    maxHeight: "100%",
+    flexDirection: "column",
   },
 });
