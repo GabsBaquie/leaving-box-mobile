@@ -4,6 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
+import { ThemeProvider, DarkTheme } from "@react-navigation/native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -28,14 +29,13 @@ export default function RootLayout() {
 
   return (
     
-    <ThemeProvider value={DarkTheme}>
+       <ThemeProvider value={DarkTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="agent/dificulty" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
-    </>
-    // </ThemeProvider>
+    </ThemeProvider>
   );
 }
