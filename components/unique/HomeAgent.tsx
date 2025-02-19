@@ -1,4 +1,11 @@
-import { Image, Pressable, StyleSheet, View, ViewStyle } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
 import { router } from "expo-router";
@@ -26,7 +33,7 @@ export default function HomeAgent({
           resizeMode="contain"
         />
 
-        <ThemedText style={styles.textStyle}>Agent</ThemedText>
+        <Text style={styles.textStyle}>Agent</Text>
       </Pressable>
     </ThemedView>
   );
@@ -59,13 +66,13 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   textStyle: {
-    fontFamily: "Poppins",
+    fontFamily: "TrainOne",
     position: "absolute",
     bottom: -10,
     left: 30,
     width: "auto",
-    fontSize: 23,
-    fontWeight: "700",
+    fontSize: 25,
+    fontWeight: "bold",
     color: "white",
   },
 });
