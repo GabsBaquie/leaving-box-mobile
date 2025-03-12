@@ -17,11 +17,14 @@ export default function JoinGame() {
   const router = useRouter();
   const { difficulty, sessionCode } = useLocalSearchParams();
   const [session, setSession] = useState<Session>();
+  const [minutes, setMinutes] = useState("0");
+  const [seconds, setSeconds] = useState("0");
 
   useEffect(() => {
     Socket.emit("createSession", { difficulty: difficulty });
     Socket.on("sessionCreated", (session) => {
       setSession(session);
+      handleTime(session.maxTime);
       console.log("sessionCreated", session);
     });
 
@@ -29,6 +32,22 @@ export default function JoinGame() {
       Socket.off("sessionCreated");
     };
   }, []);
+
+  function formatTime(totalSeconds: number) {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  }
+
+  const handleTime = (time: number) => {
+    const formatted = formatTime(time);
+    // Supposons que vous ayez deux états pour minutes et seconds
+    const [minutes, seconds] = formatted.split(":");
+    setMinutes(minutes);
+    setSeconds(seconds);
+  };
 
   const handleBack = () => {
     Socket.emit(
@@ -66,11 +85,31 @@ export default function JoinGame() {
         </View>
 
         <View style={styles.codeContainer}>
-          <TextInput style={styles.codeInput} value="1" maxLength={1} />
-          <TextInput style={styles.codeInput} value="0" maxLength={1} />
+          <TextInput
+            style={styles.codeInput}
+            value={minutes.toString().charAt(0)}
+            maxLength={1}
+            editable={false}
+          />
+          <TextInput
+            style={styles.codeInput}
+            value={minutes.toString().charAt(1)}
+            maxLength={1}
+            editable={false}
+          />
           <Text style={styles.separator}>:</Text>
-          <TextInput style={styles.codeInput} value="0" maxLength={1} />
-          <TextInput style={styles.codeInput} value="0" maxLength={1} />
+          <TextInput
+            style={styles.codeInput}
+            value={seconds.toString().charAt(0)}
+            maxLength={1}
+            editable={false}
+          />
+          <TextInput
+            style={styles.codeInput}
+            value={seconds.toString().charAt(1)}
+            maxLength={1}
+            editable={false}
+          />
         </View>
 
         <View style={styles.navigationContainer}>
