@@ -9,11 +9,13 @@ interface NavigationButtonProps {
   color?: "blue" | "red"; // Couleur du bouton
   textColor?: "black" | "white"; // Couleur du texte
   gradientDirection?: "top-to-bottom" | "bottom-to-top"; // Orientation du gradient
+  onPress?: () => void;
 }
 
 const NavigationButton: React.FC<NavigationButtonProps> = ({ 
   href, 
   label, 
+  onPress,
   color = "blue", 
   textColor = "white", 
   gradientDirection = "top-to-bottom" // Valeur par défaut
@@ -31,7 +33,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
   const gradientEnd = gradientDirection === "end" ? { x: 0, y: 1 } : { x: 0, y: 0 };
 
   return (
-    <Link href={href} asChild>
+    <Link href={href} onPress={onPress} asChild>
       <TouchableOpacity style={styles.buttonContainer}>
         <LinearGradient
           colors={gradientColors}

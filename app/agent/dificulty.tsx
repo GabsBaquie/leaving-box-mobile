@@ -152,6 +152,7 @@ export default function DifficultyScreen() {
             <NavigationButton
               href="/agent/instruc"
               label="Suivant"
+              color="red"
               onPress={() => Session.createSession("1")}
             />
           )}
