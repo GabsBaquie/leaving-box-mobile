@@ -24,16 +24,27 @@ export default function JoinGame() {
       setSession(session);
       console.log("sessionCreated", session);
     });
+
+    return () => {
+      Socket.off("sessionCreated");
+    };
   }, []);
 
   const handleBack = () => {
-    router.back();
+    Socket.emit(
+      "clearSession",
+      { sessionCode: session?.code },
+      (res: { success: boolean }) => {
+        Socket.disconnect();
+        router.back();
+      }
+    );
   };
 
   const handleNext = () => {
     router.navigate({
       pathname: "/agent/game",
-      params: { sessionCode: session?.code },
+      params: { sessionCode: session?.code, maxTime: session?.maxTime },
     });
   };
 

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useState, useRef } from "react";
 import NavigationButton from "@/components/NavigationButton";
-import * as Session from "@/core/api/session.api";
+import { Socket } from "@/core/api/session.api";
 
 export default function DifficultyScreen() {
   const router = useRouter();
@@ -61,11 +61,12 @@ export default function DifficultyScreen() {
   };
 
   const handleBack = () => {
-    router.back();
+    router.navigate("/");
   };
 
   const handleNext = () => {
     if (selectedDifficulty) {
+      Socket.connect();
       router.navigate({
         pathname: "/agent/joinGame",
         params: { difficulty: selectedDifficulty },

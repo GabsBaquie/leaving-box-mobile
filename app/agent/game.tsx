@@ -3,36 +3,58 @@ import {
   StyleSheet,
   ActivityIndicator,
   Text,
-  View,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Session } from "@/core/interface/sesssion.interface";
 import { Socket } from "@/core/api/session.api";
 
 export default function WaitingRoom() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const { sessionCode } = useLocalSearchParams();
+  const { sessionCode, maxTime, role } = useLocalSearchParams();
   const [session, setSession] = useState<any>();
 
   useEffect(() => {
     const interval = setInterval(() => {
       Socket.emit("getSession", { sessionCode: sessionCode });
-      Socket.on("currentSession", (data) => {
-        setSession(data);
-        setIsLoading(false);
-      });
-    }, 5000);
-    return () => clearInterval(interval);
+    }, 1000);
+
+    const handleCurrentSession = (data: any) => {
+      setSession(data);
+      setIsLoading(false);
+    };
+
+    Socket.on("currentSession", handleCurrentSession);
+
+    return () => {
+      clearInterval(interval);
+      Socket.off("currentSession", handleCurrentSession);
+    };
+  }, [sessionCode]);
+
+  useEffect(() => {
+    const handleSessionCleared = (res: any) => {
+      Alert.alert(
+        "Fermeture de la session",
+        "L'agent hôte de la session a quitté la salle d'attente. La session va être fermée."
+      );
+      handleBack();
+    };
+
+    Socket.on("sessionCleared", handleSessionCleared);
+
+    return () => {
+      Socket.off("sessionCleared", handleSessionCleared);
+    };
   }, []);
 
-  useEffect(() => {}, [5]);
-
   const handleBack = () => {
+    if (role === "operator") {
+      Socket.disconnect();
+    }
     router.back();
   };
 
