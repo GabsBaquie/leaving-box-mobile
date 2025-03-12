@@ -1,51 +1,24 @@
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import {
   Image,
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
+  Animated,
   Dimensions,
 } from "react-native";
-import { useState } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  Easing,
-} from "react-native-reanimated";
+import { useState, useRef } from "react";
+import NavigationButton from "@/components/NavigationButton";
 import * as Session from "@/core/api/session.api";
-
-const defaultWidth = Dimensions.get("window").width * 0.3;
-const expandedWidth = Dimensions.get("window").width * 0.9;
 
 export default function DifficultyScreen() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
-  const router = useRouter();
+  const windowWidth = Dimensions.get("window").width;
+  const animatedWidth = useRef(new Animated.Value(windowWidth * 0.3)).current;
+  const animatedPosition = useRef(new Animated.Value(0)).current;
 
-  // Create separate shared values for each difficulty
-  const widthEasy = useSharedValue(defaultWidth);
-  const widthMedium = useSharedValue(defaultWidth);
-  const widthHard = useSharedValue(defaultWidth);
-
-  // Timing configuration for all animations
-  const timingConfig = {
-    duration: 300,
-    easing: Easing.bezier(0.5, 0.01, 0, 1),
-  };
-
-  const animatedStyleEasy = useAnimatedStyle(() => {
-    return { width: widthEasy.value };
-  });
-  const animatedStyleMedium = useAnimatedStyle(() => {
-    return { width: widthMedium.value };
-  });
-  const animatedStyleHard = useAnimatedStyle(() => {
-    return { width: widthHard.value };
-  });
-
-  // Difficulty text details
   const difficultyDetails: Record<string, string> = {
     Easy: "Un mode relaxant, parfait pour les débutants.",
     Medium: "Un bon challenge avec quelques difficultés.",
@@ -54,55 +27,36 @@ export default function DifficultyScreen() {
 
   const handleDifficultySelect = (difficulty: string) => {
     if (selectedDifficulty === difficulty) {
-      // Deselect: animate the corresponding button back to default
-      if (difficulty === "Easy") {
-        widthEasy.value = withTiming(defaultWidth, timingConfig);
-      } else if (difficulty === "Medium") {
-        widthMedium.value = withTiming(defaultWidth, timingConfig);
-      } else if (difficulty === "Hard") {
-        widthHard.value = withTiming(defaultWidth, timingConfig);
-      }
+      // Si on clique sur le même bouton, on réinitialise
+      Animated.parallel([
+        Animated.timing(animatedWidth, {
+          toValue: windowWidth * 0.3,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(animatedPosition, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+      ]).start();
       setSelectedDifficulty("");
     } else {
-      // New selection: animate the selected button to expanded width and reset others
-      if (difficulty === "Easy") {
-        widthEasy.value = withTiming(expandedWidth, timingConfig);
-      } else if (difficulty === "Medium") {
-        widthMedium.value = withTiming(expandedWidth, timingConfig);
-      } else if (difficulty === "Hard") {
-        widthHard.value = withTiming(expandedWidth, timingConfig);
-      }
+      // Sinon, on sélectionne le nouveau bouton
       setSelectedDifficulty(difficulty);
+      Animated.parallel([
+        Animated.timing(animatedWidth, {
+          toValue: windowWidth * 0.9,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+        Animated.timing(animatedPosition, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: false,
+        }),
+      ]).start();
     }
-  };
-
-  // Helper to render a button for a difficulty level
-  const renderDifficultyButton = (
-    difficulty: string,
-    baseStyle: object,
-    animatedStyle: any
-  ) => {
-    const positionStyle = {
-      position: selectedDifficulty === difficulty ? "absolute" : "relative",
-      zIndex: selectedDifficulty === difficulty ? 1 : 0,
-    };
-    return (
-      <Animated.View
-        style={[
-          styles.difficultyButton,
-          baseStyle,
-          animatedStyle,
-          positionStyle,
-        ]}
-      >
-        <TouchableOpacity
-          onPress={() => handleDifficultySelect(difficulty)}
-          style={styles.buttonContent}
-        >
-          <Text style={styles.difficultyText}>{difficulty}</Text>
-        </TouchableOpacity>
-      </Animated.View>
-    );
   };
 
   return (
@@ -120,43 +74,86 @@ export default function DifficultyScreen() {
         </View>
 
         <View style={styles.difficultyContainer}>
-          {renderDifficultyButton("Easy", styles.easyButton, animatedStyleEasy)}
-          {renderDifficultyButton(
-            "Medium",
-            styles.mediumButton,
-            animatedStyleMedium
-          )}
-          {renderDifficultyButton("Hard", styles.hardButton, animatedStyleHard)}
+          <Animated.View
+            style={[
+              styles.difficultyButton,
+              styles.easyButton,
+              selectedDifficulty === "Easy" && { width: animatedWidth },
+              {
+                display:
+                  selectedDifficulty && selectedDifficulty !== "Easy"
+                    ? "none"
+                    : "flex",
+              },
+            ]}
+          >
+            <TouchableOpacity
+              onPress={() => handleDifficultySelect("Easy")}
+              style={styles.buttonContent}
+            >
+              <Text style={styles.difficultyText}>Facile</Text>
+            </TouchableOpacity>
+          </Animated.View>
+
+          <Animated.View
+            style={[
+              styles.difficultyButton,
+              styles.mediumButton,
+              selectedDifficulty === "Medium" && { width: animatedWidth },
+              {
+                display:
+                  selectedDifficulty && selectedDifficulty !== "Medium"
+                    ? "none"
+                    : "flex",
+              },
+            ]}
+          >
+            <TouchableOpacity
+              onPress={() => handleDifficultySelect("Medium")}
+              style={styles.buttonContent}
+            >
+              <Text style={styles.difficultyText}>Médium</Text>
+            </TouchableOpacity>
+          </Animated.View>
+
+          <Animated.View
+            style={[
+              styles.difficultyButton,
+              styles.hardButton,
+              selectedDifficulty === "Hard" && { width: animatedWidth },
+              {
+                display:
+                  selectedDifficulty && selectedDifficulty !== "Hard"
+                    ? "none"
+                    : "flex",
+              },
+            ]}
+          >
+            <TouchableOpacity
+              onPress={() => handleDifficultySelect("Hard")}
+              style={styles.buttonContent}
+            >
+              <Text style={styles.difficultyText}>Hard</Text>
+            </TouchableOpacity>
+          </Animated.View>
         </View>
 
-        {selectedDifficulty ? (
+        {selectedDifficulty && (
           <View style={styles.detailsContainer}>
             <Text style={styles.detailsText}>
               {difficultyDetails[selectedDifficulty]}
             </Text>
           </View>
-        ) : null}
+        )}
 
         <View style={styles.navigationContainer}>
-          <TouchableOpacity
-            style={styles.navigationButton}
-            onPress={() => router.back()}
-          >
-            <Text style={styles.navigationText}>Retour</Text>
-          </TouchableOpacity>
-
+          <NavigationButton href="/" label="Retour" />
           {selectedDifficulty && (
-            <Link
-              href={"/"}
-              asChild
-              onPress={() => {
-                Session.createSession("1");
-              }}
-            >
-              <TouchableOpacity style={styles.navigationButton}>
-                <Text style={styles.navigationText}>Suivant</Text>
-              </TouchableOpacity>
-            </Link>
+            <NavigationButton
+              href="/agent/instruc"
+              label="Suivant"
+              onPress={() => Session.createSession("1")}
+            />
           )}
         </View>
       </View>
