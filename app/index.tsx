@@ -29,7 +29,7 @@ export default function HomeScreen() {
 
       <ThemedView style={styles.mainContainer}>
         <HomeAgent navLink="/agent/dificulty" />
-        <HomeOperator navLink="/operator/joinGame" />
+        <HomeOperator navLink="/operator/instruc" />
       </ThemedView>
     </ThemedView>
   );

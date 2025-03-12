@@ -46,7 +46,7 @@ export default function WaitingRoom() {
       <NavigationButton
         href="/agent/instruc"
         param={{ sessionCode: sessionCode }}
-        label="Quitter la salle d'attente"
+        label="Quitter la salle d'attente" color="red"
       />
     </ThemedView>
   );
