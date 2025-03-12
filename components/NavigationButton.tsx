@@ -4,17 +4,19 @@ import { Link, LinkProps } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 
 interface NavigationButtonProps {
-  href: LinkProps['href'];
+  href?: LinkProps['href'];
   label: string;
   color?: "blue" | "red"; // Couleur du bouton
   textColor?: "black" | "white"; // Couleur du texte
   gradientDirection?: "top-to-bottom" | "bottom-to-top"; // Orientation du gradient
+  param?: any;
   onPress?: () => void;
 }
 
-const NavigationButton: React.FC<NavigationButtonProps> = ({ 
-  href, 
-  label, 
+const NavigationButton: React.FC<NavigationButtonProps> = ({
+  href,
+  label,
+  param,
   onPress,
   color = "blue", 
   textColor = "white", 
@@ -33,8 +35,7 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
   const gradientEnd = gradientDirection === "end" ? { x: 0, y: 1 } : { x: 0, y: 0 };
 
   return (
-    <Link href={href} onPress={onPress} asChild>
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
         <LinearGradient
           colors={gradientColors}
           start={gradientStart}
@@ -44,7 +45,6 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
           <Text style={[styles.buttonText, { color: textColor }]}>{label}</Text>
         </LinearGradient>
       </TouchableOpacity>
-    </Link>
   );
 };
 
