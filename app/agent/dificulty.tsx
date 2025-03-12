@@ -1,23 +1,9 @@
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { Link, useRouter } from "expo-router";
-import {
-  Image,
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
-import { useState } from "react";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  Easing,
-} from "react-native-reanimated";
+import { Link } from "expo-router";
+import { Image, StyleSheet, View, Text, TouchableOpacity, Animated, Dimensions } from "react-native";
+import { useState, useRef } from "react";
+import NavigationButton from '@/components/NavigationButton';
 
-const defaultWidth = Dimensions.get("window").width * 0.3;
-const expandedWidth = Dimensions.get("window").width * 0.9;
 
 export default function DifficultyScreen() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
@@ -130,26 +116,14 @@ export default function DifficultyScreen() {
 
         {selectedDifficulty ? (
           <View style={styles.detailsContainer}>
-            <Text style={styles.detailsText}>
-              {difficultyDetails[selectedDifficulty]}
-            </Text>
+            <Text style={styles.detailsText}>{difficultyDetails[selectedDifficulty]}</Text>
           </View>
         ) : null}
 
         <View style={styles.navigationContainer}>
-          <TouchableOpacity
-            style={styles.navigationButton}
-            onPress={() => router.back()}
-          >
-            <Text style={styles.navigationText}>Retour</Text>
-          </TouchableOpacity>
-
+          <NavigationButton href="/" label="Retour" />
           {selectedDifficulty && (
-            <Link href={"/"} asChild>
-              <TouchableOpacity style={styles.navigationButton}>
-                <Text style={styles.navigationText}>Suivant</Text>
-              </TouchableOpacity>
-            </Link>
+            <NavigationButton href="/agent/instruc" label="Suivant" />
           )}
         </View>
       </View>
