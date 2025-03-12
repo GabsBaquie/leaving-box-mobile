@@ -31,9 +31,9 @@ export default function InstrucScreen() {
                 </View>
 
                 <View style={styles.navigationContainer}>
-                    <NavigationButton href="/agent/game" label="Rejoindre la partie" />
+                    <NavigationButton href="/agent/game" color="red" label="Rejoindre la partie" />
 
-                    <NavigationButton href="/agent/game" label="Retour" />
+                    <NavigationButton href="/agent/game" color="red" label="Retour" />
                 </View>
 
             </View>

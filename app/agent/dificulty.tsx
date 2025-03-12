@@ -116,9 +116,9 @@ export default function DifficultyScreen() {
         )}
 
         <View style={styles.navigationContainer}>
-          <NavigationButton href="/" label="Retour" />
+          <NavigationButton href="/" label="Retour" color="red" />
           {selectedDifficulty && (
-            <NavigationButton href="/agent/instruc" label="Suivant" />
+            <NavigationButton href="/agent/instruc" label="Suivant" color="red" />
           )}
         </View>
       </View>
