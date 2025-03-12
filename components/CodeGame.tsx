@@ -37,7 +37,7 @@ const CodeGame = () => {
 
 const styles = StyleSheet.create({
   gradientBackground: {
-    width: 120,
+    width: 170,
     height: 80, 
     borderRadius: 10,
     justifyContent: "center",
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   textContainer: {
-    paddingVertical: 8,
+    paddingVertical: 20,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   copiedText: {
-    marginTop: 5,
     fontSize: 12,
     color: "#ffffff",
   },
