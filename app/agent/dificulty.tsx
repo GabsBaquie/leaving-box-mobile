@@ -2,6 +2,7 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { Link } from "expo-router";
 import { Image, StyleSheet, View, Text, TouchableOpacity, Animated, Dimensions } from "react-native";
 import { useState, useRef } from "react";
+import NavigationButton from '@/components/NavigationButton';
 
 export default function DifficultyScreen() {
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
@@ -110,24 +111,14 @@ export default function DifficultyScreen() {
 
         {selectedDifficulty && (
           <View style={styles.detailsContainer}>
-            {/* <Text style={styles.detailsTitle}>{selectedDifficulty}</Text> */}
             <Text style={styles.detailsText}>{difficultyDetails[selectedDifficulty]}</Text>
           </View>
         )}
 
         <View style={styles.navigationContainer}>
-          <Link href={"/"} asChild>
-            <TouchableOpacity style={styles.navigationButton}>
-              <Text style={styles.navigationText}>Retour</Text>
-            </TouchableOpacity>
-          </Link>
-
+          <NavigationButton href="/" label="Retour" />
           {selectedDifficulty && (
-            <Link href={"/"} asChild>
-              <TouchableOpacity style={styles.navigationButton}>
-                <Text style={styles.navigationText}>Suivant</Text>
-              </TouchableOpacity>
-            </Link>
+            <NavigationButton href="/agent/instruc" label="Suivant" />
           )}
         </View>
       </View>
