@@ -1,15 +1,24 @@
 import BackButton from "@/components/BackButton";
 import CustomButton from "@/components/CustomButton";
+import { joinSession } from "@/core/api/session.api";
 import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
 import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from "react-native";
 
 export default function JoinGame() {
+  const [code, setCode] = useState("");
+  const joinGame = () => {
+    console.log("Joining game with code:", code);
+    joinSession({ sessionCode: code, operatorId: "operator2" }).then((res) =>
+      console.log(res)
+    );
+  };
+
   return (
     <View style={styles.mainContainer}>
       <BackButton />
@@ -24,13 +33,19 @@ export default function JoinGame() {
           colors={["#92D7DD", "#005893"]}
           style={styles.codeInputGradiant}
         />
-        <TextInput placeholder="Input Code" style={styles.codeInput} />
+        <TextInput
+          placeholder="Input Code"
+          style={styles.codeInput}
+          value={code}
+          onChange={(e) => setCode(e.nativeEvent.text)}
+        />
       </View>
 
       <CustomButton
         buttonText="Join Game"
         linearGradientColors={["#92D7DD", "#005893"]}
         containerStyle={{}}
+        onPress={joinGame}
       />
     </View>
   );
