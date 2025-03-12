@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import NavigationButton from '@/components/NavigationButton';
-import CodeGame from "@/components/CodeGame";
 import { Link } from "expo-router";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
@@ -22,7 +21,7 @@ export default function WaitingRoom() {
     <ThemedView style={styles.container}>
       <ThemedText style={styles.title}>Salle d'attente</ThemedText>
       {isLoading ? (
-        <CodeGame />
+        <ActivityIndicator size="large" color="#ffffff" style={{ marginBottom: 20 }} />
       ) : (
         <ThemedText style={styles.message}>Tous les joueurs sont prêts !</ThemedText>
       )}

@@ -2,16 +2,14 @@ import React from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import NavigationButton from '@/components/NavigationButton';
 import ParallaxScrollView from "@/components/ParallaxScrollView";
+import CodeGame from "@/components/CodeGame";
 import { Link } from "expo-router";
 
 export default function InstrucScreen() {
     return (
         <ParallaxScrollView>
             <View style={styles.container}>
-                {/* Bouton Code */}
-                <TouchableOpacity style={styles.codeButton}>
-                    <Text style={styles.codeText}>CODE</Text>
-                </TouchableOpacity>
+                 <CodeGame />
 
                 {/* Texte explicatif */}
                 <Text style={styles.title}>Why do we use it?</Text>
@@ -33,7 +31,7 @@ export default function InstrucScreen() {
                 <View style={styles.navigationContainer}>
                     <NavigationButton href="/agent/game" color="red" label="Rejoindre la partie" />
 
-                    <NavigationButton href="/agent/game" color="red" label="Retour" />
+                    <NavigationButton href="/" color="red" label="Retour" />
                 </View>
 
             </View>
