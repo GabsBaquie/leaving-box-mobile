@@ -15,6 +15,7 @@ import Animated, {
   withTiming,
   Easing,
 } from "react-native-reanimated";
+import * as Session from "@/core/api/session.api";
 
 const defaultWidth = Dimensions.get("window").width * 0.3;
 const expandedWidth = Dimensions.get("window").width * 0.9;
@@ -145,7 +146,13 @@ export default function DifficultyScreen() {
           </TouchableOpacity>
 
           {selectedDifficulty && (
-            <Link href={"/"} asChild>
+            <Link
+              href={"/"}
+              asChild
+              onPress={() => {
+                Session.createSession("1");
+              }}
+            >
               <TouchableOpacity style={styles.navigationButton}>
                 <Text style={styles.navigationText}>Suivant</Text>
               </TouchableOpacity>

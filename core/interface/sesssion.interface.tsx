@@ -5,3 +5,8 @@ export interface Session {
   operatorIds: string[];
   createdAt: Date;
 }
+
+export interface SessionResponse {
+  session: Session;
+  message: string;
+}
