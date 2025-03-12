@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Clipboard, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Clipboard,
+  TouchableOpacity,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
-const CodeGame = () => {
+const CodeGame = ({ code = "12344" }: Readonly<{ code?: string }>) => {
   const [copied, setCopied] = useState(false);
-  const code = "1234-5678"; // Code affiché
 
   const copyToClipboard = () => {
     Clipboard.setString(code);
@@ -38,14 +43,14 @@ const CodeGame = () => {
 const styles = StyleSheet.create({
   gradientBackground: {
     width: 170,
-    height: 80, 
+    height: 80,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
   },
   textContainer: {
-    paddingVertical: 20,
+    paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
   },

@@ -9,24 +9,32 @@ import {
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Session } from "@/core/interface/sesssion.interface";
+import { Socket } from "@/core/api/session.api";
 
 export default function WaitingRoom() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const { sessionCode } = useLocalSearchParams();
-  const [session, setSession] = useState<Session>();
+  const [session, setSession] = useState<any>();
 
   useEffect(() => {
-    // Simulate a loading process
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    const interval = setInterval(() => {
+      Socket.emit("getSession", { sessionCode: sessionCode });
+      Socket.on("currentSession", (data) => {
+        setSession(data);
+        setIsLoading(false);
+      });
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {}, [5]);
+
+  const handleBack = () => {
+    router.back();
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -41,12 +49,17 @@ export default function WaitingRoom() {
           style={{ marginBottom: 20 }}
         />
       ) : (
-        <Text style={styles.message}>Tous les joueurs sont prêts !</Text>
+        session?.connectedClients.map((client: any) => (
+          <Text key={client.id} style={styles.message}>
+            {client.id}
+          </Text>
+        ))
       )}
       <NavigationButton
-        href="/agent/instruc"
+        onPress={handleBack}
         param={{ sessionCode: sessionCode }}
-        label="Quitter la salle d'attente" color="red"
+        label="Quitter la salle d'attente"
+        color="red"
       />
     </ThemedView>
   );
