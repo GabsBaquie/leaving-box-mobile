@@ -1,12 +1,21 @@
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
-import NavigationButton from '@/components/NavigationButton';
-import { Link } from "expo-router";
+import {
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
+import { useLocalSearchParams } from "expo-router";
+import { Session } from "@/core/interface/sesssion.interface";
 
 export default function WaitingRoom() {
   const [isLoading, setIsLoading] = useState(true);
+  const { sessionCode } = useLocalSearchParams();
+  const [session, setSession] = useState<Session>();
 
   useEffect(() => {
     // Simulate a loading process
@@ -17,17 +26,28 @@ export default function WaitingRoom() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {}, [5]);
+
   return (
     <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>Salle d'attente</ThemedText>
+      <Text style={styles.title}>Salle d'attente</Text>
+      <TouchableOpacity style={styles.codeButton}>
+        <Text style={styles.codeText}>{sessionCode}</Text>
+      </TouchableOpacity>
       {isLoading ? (
-        <ActivityIndicator size="large" color="#ffffff" style={{ marginBottom: 20 }} />
+        <ActivityIndicator
+          size="large"
+          color="#ffffff"
+          style={{ marginBottom: 20 }}
+        />
       ) : (
-        <ThemedText style={styles.message}>Tous les joueurs sont prêts !</ThemedText>
+        <Text style={styles.message}>Tous les joueurs sont prêts !</Text>
       )}
-    
-     <NavigationButton href="/" label="Quitter la salle d'attente" />
-
+      <NavigationButton
+        href="/agent/instruc"
+        param={{ sessionCode: sessionCode }}
+        label="Quitter la salle d'attente"
+      />
     </ThemedView>
   );
 }
@@ -38,6 +58,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+  },
+  codeButton: {
+    backgroundColor: "red",
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+    marginVertical: 20,
+    elevation: 5,
+    position: "absolute",
+    top: 20,
+    right: 20,
+  },
+  codeText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   title: {
     fontSize: 24,

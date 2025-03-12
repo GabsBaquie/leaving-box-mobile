@@ -151,8 +151,8 @@ export default function DifficultyScreen() {
           {selectedDifficulty && (
             <NavigationButton
               href="/agent/instruc"
+              param={{ difficulty: selectedDifficulty }}
               label="Suivant"
-              onPress={() => Session.createSession("1")}
             />
           )}
         </View>

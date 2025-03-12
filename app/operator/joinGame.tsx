@@ -1,22 +1,25 @@
 import BackButton from "@/components/BackButton";
 import CustomButton from "@/components/CustomButton";
-import { joinSession } from "@/core/api/session.api";
+import { Socket } from "@/core/api/session.api";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function JoinGame() {
   const [code, setCode] = useState("");
+
   const joinGame = () => {
-    console.log("Joining game with code:", code);
-    joinSession({ sessionCode: code, operatorId: "operator2" }).then((res) =>
-      console.log(res)
-    );
+    Socket.emit("joinSession", { sessionCode: code, operatorId: "operator1" });
+    Socket.on("playerJoined", () => {
+      console.log("playerJoined");
+    });
+
+    setTimeout(() => {
+      Socket.emit("getSession", { sessionCode: code });
+      Socket.on("currentSession", (data) => {
+        console.log("currentSession", data);
+      });
+    }, 1000);
   };
 
   return (

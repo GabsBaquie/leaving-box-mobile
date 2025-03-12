@@ -5,16 +5,18 @@ import { Link } from "expo-router";
 interface NavigationButtonProps {
   href: string;
   label: string;
+  param?: any;
   onPress?: () => void;
 }
 
 const NavigationButton: React.FC<NavigationButtonProps> = ({
   href,
   label,
+  param,
   onPress,
 }) => {
   return (
-    <Link href={href} asChild onPress={onPress}>
+    <Link href={{ pathname: href, params: param }} asChild onPress={onPress}>
       <TouchableOpacity style={styles.joinButton}>
         <Text style={styles.joinButtonText}>{label}</Text>
       </TouchableOpacity>
