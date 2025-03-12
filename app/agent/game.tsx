@@ -26,7 +26,7 @@ export default function WaitingRoom() {
         <ThemedText style={styles.message}>Tous les joueurs sont prêts !</ThemedText>
       )}
     
-     <NavigationButton href="/" label="Quitter la salle d'attente" />
+     <NavigationButton href="/" label="Quitter la salle d'attente" color="red" />
 
     </ThemedView>
   );

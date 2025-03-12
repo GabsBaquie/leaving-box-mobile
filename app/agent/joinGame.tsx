@@ -2,26 +2,27 @@ import React from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import NavigationButton from '@/components/NavigationButton';
 import ParallaxScrollView from "@/components/ParallaxScrollView";
+import CodeGame from "@/components/CodeGame";
 import { Link } from "expo-router";
 
 export default function InstrucScreen() {
     return (
         <ParallaxScrollView>
             <View style={styles.container}>
-                {/* Bouton Code */}
-                <TouchableOpacity style={styles.codeButton}>
-                    <Text style={styles.codeText}>CODE</Text>
-                </TouchableOpacity>
+                
+                 <CodeGame />
 
-                {/* Texte explicatif */}
-                <Text style={styles.title}>Why do we use it?</Text>
-                <Text style={styles.description}>
-                    It is a long established fact that a reader will be distracted by the readable content
-                    of a page when looking at its layout. The point of using Lorem Ipsum is that it has a
-                    more-or-less normal distribution of letters...
-                </Text>
+                <View style={{ marginVertical: 20 }}>
+                    <Text style={styles.title}>Why do we use it?</Text>
+                    <Text style={styles.description}>
+                       Proident est dolore ullamco cupidatat non ullamco anim. Laborum ea aliquip magna deserunt qui. 
+                       Elit mollit elit deserunt velit labore proident adipisicing nisi esse sunt laboris.
+                       Magna eu dolore ad. Aute Lorem aute tempor dolore nisi aliqua reprehenderit commodo ut laborum nostrud laboris pariatur.
+                       Duis amet in minim sunt amet adipisicing velit consectetur amet pariatur sunt ut.
+                    </Text>
+                </View>
 
-                {/* Section Code à 4 chiffres */}
+                
                 <View style={styles.codeContainer}>
                     <TextInput style={styles.codeInput} value="1" maxLength={1} />
                     <TextInput style={styles.codeInput} value="0" maxLength={1} />
@@ -31,9 +32,9 @@ export default function InstrucScreen() {
                 </View>
 
                 <View style={styles.navigationContainer}>
-                    <NavigationButton href="/agent/game" label="Rejoindre la partie" />
+                    <NavigationButton href="/agent/game" color="red" label="Rejoindre la partie" />
 
-                    <NavigationButton href="/agent/game" label="Retour" />
+                    <NavigationButton href="/" color="red" label="Retour" />
                 </View>
 
             </View>
@@ -43,9 +44,10 @@ export default function InstrucScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: "center",
-        padding: 20,
+       flex: 1,
+       padding: 20,
+       alignItems: "center",
+       marginVertical: 50,
     },
 
     codeButton: {
