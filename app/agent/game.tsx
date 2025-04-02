@@ -5,11 +5,13 @@ import {
   Text,
   TouchableOpacity,
   Alert,
+  View,
 } from "react-native";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Socket } from "@/core/api/session.api";
+import PlayerConnected from "@/components/PlayerConnected";
 
 export default function WaitingRoom() {
   const router = useRouter();
@@ -51,6 +53,17 @@ export default function WaitingRoom() {
     };
   }, []);
 
+  const handleNext = () => {
+    router.navigate({
+      pathname: "/agent/timerPage",
+      params: {
+        sessionCode: session?.code,
+        maxTime: maxTime,
+        role: role,
+      },
+    });
+  };
+
   const handleBack = () => {
     if (role === "operator") {
       Socket.disconnect();
@@ -71,18 +84,24 @@ export default function WaitingRoom() {
           style={{ marginBottom: 20 }}
         />
       ) : (
-        session?.connectedClients.map((client: any) => (
-          <Text key={client.id} style={styles.message}>
-            {client.id}
-          </Text>
+        session?.connectedClients.map((client: any, key: any) => (
+          <PlayerConnected key={key} role={key === 0 ? "agent" : "operator"} />
         ))
       )}
-      <NavigationButton
-        onPress={handleBack}
-        param={{ sessionCode: sessionCode }}
-        label="Quitter la salle d'attente"
-        color="red"
-      />
+      <View style={styles.buttonContainer}>
+        <NavigationButton
+          onPress={handleNext}
+          param={{ sessionCode: sessionCode }}
+          label="Lançer la partie"
+          color="red"
+        />
+        <NavigationButton
+          onPress={handleBack}
+          param={{ sessionCode: sessionCode }}
+          label="Retour"
+          color="red"
+        />
+      </View>
     </ThemedView>
   );
 }
@@ -109,6 +128,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  buttonContainer: {
+    gap: 20,
   },
   title: {
     fontSize: 24,

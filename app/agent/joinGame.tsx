@@ -63,7 +63,11 @@ export default function JoinGame() {
   const handleNext = () => {
     router.navigate({
       pathname: "/agent/game",
-      params: { sessionCode: session?.code, maxTime: session?.maxTime },
+      params: {
+        sessionCode: session?.code,
+        maxTime: session?.maxTime,
+        role: "agent",
+      },
     });
   };
 
@@ -117,7 +121,7 @@ export default function JoinGame() {
           <NavigationButton
             onPress={handleNext}
             color="red"
-            label="Rejoindre la partie"
+            label="Voir la salle d'attente"
           />
         </View>
       </View>
