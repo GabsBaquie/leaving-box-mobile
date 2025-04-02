@@ -20,7 +20,6 @@ export default function WaitingRoom() {
   const [isLoading, setIsLoading] = useState(true);
   const { sessionCode, maxTime, role } = useLocalSearchParams();
   const [session, setSession] = useState<any>();
-  const { role } = useRole();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -113,6 +112,7 @@ export default function WaitingRoom() {
         label="Quitter la salle d'attente"
         color="red"
       />
+      </View>
     </ThemedView>
   );
 }
