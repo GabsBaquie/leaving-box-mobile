@@ -1,26 +1,55 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { useRole } from "@/components/RoleContext";
+import {
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";
-import { useRole } from "@/components/RoleContext";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Session } from "@/core/interface/sesssion.interface";
+import { Socket } from "@/core/api/session.api";
 
 export default function WaitingRoom() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const { role } = useRole();
+  const { sessionCode } = useLocalSearchParams();
+  const [session, setSession] = useState<any>();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-    return () => clearTimeout(timer);
+    const interval = setInterval(() => {
+      Socket.emit("getSession", { sessionCode: sessionCode });
+      Socket.on("currentSession", (data) => {
+        setSession(data);
+        setIsLoading(false);
+      });
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {}, [5]);
+
+  const handleBack = () => {
+    router.back();
+  };
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>Salle d'attente</ThemedText>
+      <Text style={styles.title}>Salle d'attente</Text>
+      <TouchableOpacity style={styles.codeButton}>
+        <Text style={styles.codeText}>{sessionCode}</Text>
+      </TouchableOpacity>
       {isLoading ? (
-        <ActivityIndicator size="large" color="#ffffff" style={{ marginBottom: 20 }} />
+        <ActivityIndicator
+          size="large"
+          color="#ffffff"
+          style={{ marginBottom: 20 }}
+        />
       ) : (
         <View style={{ alignItems: "center", marginBottom: 50 }}>
           <ThemedText style={styles.message}>Tous les joueurs sont prêts !</ThemedText>
@@ -33,7 +62,19 @@ export default function WaitingRoom() {
           )}
         </View>
       )}
-      <NavigationButton href="/" label="Quitter la salle d'attente" color="red" />
+        
+        session?.connectedClients.map((client: any) => (
+          <Text key={client.id} style={styles.message}>
+            {client.id}
+          </Text>
+        ))
+      )}
+      <NavigationButton
+        onPress={handleBack}
+        param={{ sessionCode: sessionCode }}
+        label="Quitter la salle d'attente"
+        color="red"
+      />
     </ThemedView>
   );
 }
@@ -44,6 +85,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+  },
+  codeButton: {
+    backgroundColor: "red",
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+    marginVertical: 20,
+    elevation: 5,
+    position: "absolute",
+    top: 20,
+    right: 20,
+  },
+  codeText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   title: {
     fontSize: 24,

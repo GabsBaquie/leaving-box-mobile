@@ -1,5 +1,5 @@
 import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import {
   Image,
   StyleSheet,
@@ -14,6 +14,7 @@ import NavigationButton from "@/components/NavigationButton";
 import * as Session from "@/core/api/session.api";
 
 export default function DifficultyScreen() {
+  const router = useRouter();
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("");
   const windowWidth = Dimensions.get("window").width;
   const animatedWidth = useRef(new Animated.Value(windowWidth * 0.3)).current;
@@ -56,6 +57,19 @@ export default function DifficultyScreen() {
           useNativeDriver: false,
         }),
       ]).start();
+    }
+  };
+
+  const handleBack = () => {
+    router.back();
+  };
+
+  const handleNext = () => {
+    if (selectedDifficulty) {
+      router.navigate({
+        pathname: "/agent/joinGame",
+        params: { difficulty: selectedDifficulty },
+      });
     }
   };
 
@@ -147,13 +161,13 @@ export default function DifficultyScreen() {
         )}
 
         <View style={styles.navigationContainer}>
-          <NavigationButton href="/" label="Retour" color="red" />
+          <NavigationButton onPress={handleBack} label="Retour" color="red" />
           {selectedDifficulty && (
             <NavigationButton
               href="/agent/joinGame"
               label="Suivant"
               color="red"
-              onPress={() => Session.createSession("1")}
+              onPress={handleNext}
             />
           )}
         </View>
@@ -165,7 +179,7 @@ export default function DifficultyScreen() {
 const styles = StyleSheet.create({
   logoContainer: {
     marginTop: 100,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 50,
   },
 
@@ -177,53 +191,53 @@ const styles = StyleSheet.create({
   },
 
   difficultyContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: 80,
-    width: '100%',
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   difficultyButton: {
     height: 80,
-    width: '30%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    transform: [{ skewX: '-10deg' }],
-    overflow: 'hidden',
+    width: "30%",
+    justifyContent: "center",
+    alignItems: "center",
+    transform: [{ skewX: "-10deg" }],
+    overflow: "hidden",
     borderWidth: 1,
-    borderStyle: 'solid',
+    borderStyle: "solid",
   },
 
   buttonContent: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   easyButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
     zIndex: 2,
   },
 
   mediumButton: {
-    backgroundColor: '#FF9800',
+    backgroundColor: "#FF9800",
     zIndex: 3,
     marginHorizontal: -10,
   },
 
   hardButton: {
-    backgroundColor: '#F44336',
+    backgroundColor: "#F44336",
     zIndex: 1,
   },
 
   difficultyText: {
-    color: 'black',
+    color: "black",
     fontSize: 18,
-    fontWeight: 'bold',
-    transform: [{ skewX: '10deg' }],
+    fontWeight: "bold",
+    transform: [{ skewX: "10deg" }],
   },
 
   detailsContainer: {
