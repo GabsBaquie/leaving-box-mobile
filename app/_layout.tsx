@@ -7,7 +7,6 @@ import "react-native-reanimated";
 import { ThemeProvider, DarkTheme } from "@react-navigation/native";
 import { RoleProvider } from "@/components/RoleContext";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {

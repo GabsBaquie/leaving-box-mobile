@@ -16,7 +16,7 @@ export default function HomeScreen() {
       router.navigate("/agent/dificulty");
     } 
     if (role === "operator") {
-      router.navigate("/operator/instruc");
+      router.navigate("/operator/joinGame");
     }
   };
 
