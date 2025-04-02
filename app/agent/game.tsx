@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import { ThemedText } from "@/components/ThemedText";

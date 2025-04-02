@@ -13,9 +13,9 @@ interface NavigationButtonProps {
   onPress?: () => void;
 }
 
-const NavigationButton: React.FC<NavigationButtonProps> = ({ 
-  href, 
-  label, 
+const NavigationButton: React.FC<NavigationButtonProps> = ({
+  href,
+  label,
   param,
   onPress,
   color = "blue", 

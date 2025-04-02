@@ -43,7 +43,7 @@ const CodeGame = ({ code = "12344" }: Readonly<{ code?: string }>) => {
 const styles = StyleSheet.create({
   gradientBackground: {
     width: 170,
-    height: 80, 
+    height: 80,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
