@@ -5,8 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 import { ThemeProvider, DarkTheme } from "@react-navigation/native";
+import { RoleProvider } from "@/components/RoleContext";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -29,19 +29,15 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={DarkTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="agent/dificulty" options={{ headerShown: false }} />
-        <Stack.Screen name="agent/joinGame" options={{ headerShown: false }} />
-        <Stack.Screen name="agent/game" options={{ headerShown: false }} />
-
-        <Stack.Screen
-          name="operator/joinGame"
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
+      <RoleProvider>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="agent/dificulty" options={{ headerShown: false }} />
+          <Stack.Screen name="operator/joinGame" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </RoleProvider>
     </ThemeProvider>
   );
 }

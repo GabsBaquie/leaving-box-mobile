@@ -3,15 +3,12 @@ import {
   StyleSheet,
   ActivityIndicator,
   Text,
-  View,
   TouchableOpacity,
 } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Socket } from "@/core/api/session.api";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { Session } from "@/core/interface/sesssion.interface";
-import { Socket } from "@/core/api/session.api";
 
 export default function WaitingRoom() {
   const router = useRouter();
