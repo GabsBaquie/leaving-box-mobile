@@ -58,7 +58,7 @@ export default function WaitingRoom() {
     router.navigate({
       pathname: "/agent/timerPage",
       params: {
-        sessionCode: session?.code,
+        sessionCode: sessionCode,
         maxTime: maxTime,
         role: role,
       },
