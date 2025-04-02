@@ -6,6 +6,7 @@ import {
 } from "react-native";
 import { ThemedView } from "../ThemedView";
 import { router } from "expo-router";
+import { Socket } from "@/core/api/session.api";
 
 type HomeOperatorProps = {
   navLink?: string;
@@ -19,6 +20,7 @@ export default function HomeOperator({ navLink, onPress }: HomeOperatorProps) {
     } else if (navLink) {
       router.navigate(navLink);
     }
+    Socket.connect();
   }
 
   return (
