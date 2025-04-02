@@ -1,10 +1,10 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { Link, LinkProps } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
+import React from "react";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { Link, LinkProps } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface NavigationButtonProps {
-  href?: LinkProps['href'];
+  href?: LinkProps["href"];
   label: string;
   color?: "blue" | "red"; // Couleur du bouton
   textColor?: "black" | "white"; // Couleur du texte
@@ -18,9 +18,9 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
   label,
   param,
   onPress,
-  color = "blue", 
-  textColor = "white", 
-  gradientDirection = "top-to-bottom" // Valeur par défaut
+  color = "blue",
+  textColor = "white",
+  gradientDirection = "top-to-bottom", // Valeur par défaut
 }) => {
   // Définition des couleurs du gradient en fonction de la couleur choisie
   const gradientColors =
@@ -31,20 +31,22 @@ const NavigationButton: React.FC<NavigationButtonProps> = ({
       : ["#ff512f", "#000000"]; // Dégradé par défaut (orange -> noir)
 
   // Définition du sens du gradient
-  const gradientStart = gradientDirection === "start" ? { x: 0, y: 0 } : { x: 0, y: 1 };
-  const gradientEnd = gradientDirection === "end" ? { x: 0, y: 1 } : { x: 0, y: 0 };
+  const gradientStart =
+    gradientDirection === "start" ? { x: 0, y: 0 } : { x: 0, y: 1 };
+  const gradientEnd =
+    gradientDirection === "end" ? { x: 0, y: 1 } : { x: 0, y: 0 };
 
   return (
-      <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
-        <LinearGradient
-          colors={gradientColors}
-          start={gradientStart}
-          end={gradientEnd}
-          style={styles.gradientButton}
-        >
-          <Text style={[styles.buttonText, { color: textColor }]}>{label}</Text>
-        </LinearGradient>
-      </TouchableOpacity>
+    <TouchableOpacity style={styles.buttonContainer} onPress={onPress}>
+      <LinearGradient
+        colors={gradientColors}
+        start={gradientStart}
+        end={gradientEnd}
+        style={styles.gradientButton}
+      >
+        <Text style={[styles.buttonText, { color: textColor }]}>{label}</Text>
+      </LinearGradient>
+    </TouchableOpacity>
   );
 };
 

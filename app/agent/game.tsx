@@ -4,34 +4,73 @@ import {
   ActivityIndicator,
   Text,
   TouchableOpacity,
+  Alert,
+  View,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Socket } from "@/core/api/session.api";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
+import PlayerConnected from "@/components/PlayerConnected";
 import { useRole } from "@/components/RoleContext";
+
 
 export default function WaitingRoom() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const { sessionCode } = useLocalSearchParams();
+  const { sessionCode, maxTime, role } = useLocalSearchParams();
   const [session, setSession] = useState<any>();
   const { role } = useRole();
 
   useEffect(() => {
     const interval = setInterval(() => {
       Socket.emit("getSession", { sessionCode: sessionCode });
-      Socket.on("currentSession", (data) => {
-        setSession(data);
-        setIsLoading(false);
-      });
-    }, 5000);
-    return () => clearInterval(interval);
+    }, 1000);
+
+    const handleCurrentSession = (data: any) => {
+      setSession(data);
+      setIsLoading(false);
+    };
+
+    Socket.on("currentSession", handleCurrentSession);
+
+    return () => {
+      clearInterval(interval);
+      Socket.off("currentSession", handleCurrentSession);
+    };
+  }, [sessionCode]);
+
+  useEffect(() => {
+    const handleSessionCleared = (res: any) => {
+      Alert.alert(
+        "Fermeture de la session",
+        "L'agent hôte de la session a quitté la salle d'attente. La session va être fermée."
+      );
+      handleBack();
+    };
+
+    Socket.on("sessionCleared", handleSessionCleared);
+
+    return () => {
+      Socket.off("sessionCleared", handleSessionCleared);
+    };
   }, []);
 
-  useEffect(() => {}, [5]);
+  const handleNext = () => {
+    router.navigate({
+      pathname: "/agent/timerPage",
+      params: {
+        sessionCode: session?.code,
+        maxTime: maxTime,
+        role: role,
+      },
+    });
+  };
 
   const handleBack = () => {
+    if (role === "operator") {
+      Socket.disconnect();
+    }
     router.back();
   };
 
@@ -48,12 +87,17 @@ export default function WaitingRoom() {
           style={{ marginBottom: 20 }}
         />
       ) : (
-        session?.connectedClients.map((client: any) => (
-          <Text key={client.id} style={styles.message}>
-            {client.id}
-          </Text>
+        session?.connectedClients.map((client: any, key: any) => (
+          <PlayerConnected key={key} role={key === 0 ? "agent" : "operator"} />
         ))
       )}
+      <View style={styles.buttonContainer}>
+        <NavigationButton
+          onPress={handleNext}
+          param={{ sessionCode: sessionCode }}
+          label="Lançer la partie"
+          color="red"
+        />
 
       {role === "agent" && session?.connectedClients?.length > 0 && (
         <NavigationButton 
@@ -95,6 +139,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  buttonContainer: {
+    gap: 20,
   },
   title: {
     fontSize: 24,
