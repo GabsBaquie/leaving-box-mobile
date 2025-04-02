@@ -12,7 +12,6 @@ import { Socket } from "@/core/api/session.api";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import PlayerConnected from "@/components/PlayerConnected";
-import { useRole } from "@/components/RoleContext";
 
 
 export default function WaitingRoom() {
@@ -91,19 +90,20 @@ export default function WaitingRoom() {
         ))
       )}
       <View style={styles.buttonContainer}>
+        {role === "agent" && (
+          <NavigationButton
+            onPress={handleNext}
+            param={{ sessionCode: sessionCode }}
+            label="Lancer la partie"
+            color="red"
+          />
+        )}
         <NavigationButton
-          onPress={handleNext}
+          onPress={handleBack}
           param={{ sessionCode: sessionCode }}
-          label="Lançer la partie"
+          label="Quitter la salle d'attente"
           color="red"
         />
-
-      <NavigationButton
-        onPress={handleBack}
-        param={{ sessionCode: sessionCode }}
-        label="Quitter la salle d'attente"
-        color="red"
-      />
       </View>
     </ThemedView>
   );
