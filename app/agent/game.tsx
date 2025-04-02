@@ -98,14 +98,6 @@ export default function WaitingRoom() {
           color="red"
         />
 
-      {role === "agent" && session?.connectedClients?.length > 0 && (
-        <NavigationButton 
-          href="/agent/timer" 
-          label="Go" 
-          color="red" 
-        />
-      )}
-
       <NavigationButton
         onPress={handleBack}
         param={{ sessionCode: sessionCode }}
