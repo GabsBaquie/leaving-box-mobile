@@ -3,20 +3,22 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
-  ViewStyle,
 } from "react-native";
-import { ThemedText } from "../ThemedText";
 import { ThemedView } from "../ThemedView";
 import { router } from "expo-router";
 
-export default function HomeAgent({
-  navLink,
-}: Readonly<{
-  navLink: any;
-}>) {
+type HomeAgentProps = {
+  navLink?: string;
+  onPress?: () => void;
+};
+
+export default function HomeAgent({ navLink, onPress }: HomeAgentProps) {
   function handleComponentClick() {
-    router.navigate(navLink);
+    if (onPress) {
+      onPress();
+    } else if (navLink) {
+      router.navigate(navLink);
+    }
   }
 
   return (
@@ -32,7 +34,6 @@ export default function HomeAgent({
           style={styles.image2Style}
           resizeMode="contain"
         />
-
         <Text style={styles.textStyle}>Agent</Text>
       </Pressable>
     </ThemedView>
@@ -47,9 +48,7 @@ const styles = StyleSheet.create({
     flex: 1,
     zIndex: 1,
     flexDirection: "column",
-    // backgroundColor: "green",
   },
-
   image1Style: {
     height: 300,
     maxWidth: "100%",
@@ -62,7 +61,6 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     left: -60,
     bottom: 0,
-
     position: "absolute",
   },
   textStyle: {
@@ -70,7 +68,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: -10,
     left: 30,
-    width: "auto",
     fontSize: 25,
     fontWeight: "bold",
     color: "white",

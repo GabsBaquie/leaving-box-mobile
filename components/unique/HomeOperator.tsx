@@ -3,21 +3,24 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View,
-  ViewStyle,
 } from "react-native";
 import { ThemedView } from "../ThemedView";
 import { router } from "expo-router";
 import { Socket } from "@/core/api/session.api";
 
-export default function HomeOperator({
-  navLink,
-}: Readonly<{
-  navLink: any;
-}>) {
+type HomeOperatorProps = {
+  navLink?: string;
+  onPress?: () => void;
+};
+
+export default function HomeOperator({ navLink, onPress }: HomeOperatorProps) {
   function handleComponentClick() {
+    if (onPress) {
+      onPress();
+    } else if (navLink) {
+      router.navigate(navLink);
+    }
     Socket.connect();
-    router.navigate(navLink);
   }
 
   return (
@@ -47,9 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     zIndex: 10,
     flexDirection: "column-reverse",
-    // backgroundColor: "red",
   },
-
   image1Style: {
     zIndex: 10,
     height: 300,
@@ -57,7 +58,6 @@ const styles = StyleSheet.create({
     left: 60,
     position: "relative",
   },
-
   image2Style: {
     zIndex: 10,
     height: 300,
@@ -65,13 +65,11 @@ const styles = StyleSheet.create({
     left: -60,
     position: "absolute",
   },
-
   textStyle: {
     fontFamily: "TrainOne",
     position: "absolute",
     top: 100,
     right: 20,
-    width: "auto",
     fontSize: 25,
     fontWeight: "700",
     color: "black",

@@ -7,10 +7,10 @@ import {
   Alert,
   View,
 } from "react-native";
-import NavigationButton from "@/components/NavigationButton";
-import { ThemedView } from "@/components/ThemedView";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Socket } from "@/core/api/session.api";
+import NavigationButton from "@/components/NavigationButton";
+import { ThemedView } from "@/components/ThemedView";
 import PlayerConnected from "@/components/PlayerConnected";
 
 export default function WaitingRoom() {
