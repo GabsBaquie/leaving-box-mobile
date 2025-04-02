@@ -27,7 +27,6 @@ export default function TimerPage() {
 
   const handleTime = (time: number) => {
     const formatted = formatTime(time);
-    // Supposons que vous ayez deux états pour minutes et seconds
     const [minutes, seconds] = formatted.split(":");
     setMinutes(minutes);
     setSeconds(seconds);
@@ -37,12 +36,23 @@ export default function TimerPage() {
     console.log("Starting timer");
     Socket.emit("startTimer", { sessionCode: sessionCode, duration: maxTime });
     Socket.on("timerUpdate", (data: any) => {
+      console.log("Timer update", data);
       handleTime(data.remaining);
-      console.info("Timer update", data);
     });
     Socket.on("gameOver", (data: any) => {
       Alert.alert("Fin de la partie", data.message);
     });
+  };
+
+  const handleBack = () => {
+    Socket.emit(
+      "clearSession",
+      { sessionCode: sessionCode },
+      (res: { success: boolean }) => {
+        Socket.disconnect();
+        router.back();
+      }
+    );
   };
 
   return (
@@ -85,6 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     alignItems: "center",
+    justifyContent: "center",
     marginVertical: 50,
   },
   title: {
@@ -94,6 +105,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
+    color: "white",
     fontSize: 18,
   },
 
