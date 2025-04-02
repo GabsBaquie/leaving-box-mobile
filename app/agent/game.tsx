@@ -1,19 +1,15 @@
 import { useState, useEffect } from "react";
-import NavigationButton from "@/components/NavigationButton";
-import { ThemedView } from "@/components/ThemedView";
-import { ThemedText } from "@/components/ThemedText";
 import { useRole } from "@/components/RoleContext";
 import {
   StyleSheet,
   ActivityIndicator,
   Text,
-  View,
   TouchableOpacity,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Session } from "@/core/interface/sesssion.interface";
 import { Socket } from "@/core/api/session.api";
-
+import NavigationButton from "@/components/NavigationButton";
+import { ThemedView } from "@/components/ThemedView";
 
 export default function WaitingRoom() {
   const router = useRouter();
@@ -59,18 +55,6 @@ export default function WaitingRoom() {
           style={{ marginBottom: 20 }}
         />
       ) : (
-        <View style={{ alignItems: "center", marginBottom: 50 }}>
-          <ThemedText style={styles.message}>Tous les joueurs sont prêts !</ThemedText>
-          {role === "agent" && (
-            <NavigationButton 
-              href="/agent/timer" 
-              label="Go" 
-              color="red" 
-            />
-          )}
-        </View>
-      )}
-      <NavigationButton href="/" label="Quitter la salle d'attente" color="red" />
         session?.connectedClients.map((client: any) => (
           <Text key={client.id} style={styles.message}>
             {client.id}
