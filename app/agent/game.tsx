@@ -9,12 +9,14 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Socket } from "@/core/api/session.api";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
+import { useRole } from "@/components/RoleContext";
 
 export default function WaitingRoom() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const { sessionCode } = useLocalSearchParams();
   const [session, setSession] = useState<any>();
+  const { role } = useRole();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,6 +54,15 @@ export default function WaitingRoom() {
           </Text>
         ))
       )}
+
+      {role === "agent" && session?.connectedClients?.length > 0 && (
+        <NavigationButton 
+          href="/agent/timer" 
+          label="Go" 
+          color="red" 
+        />
+      )}
+
       <NavigationButton
         onPress={handleBack}
         param={{ sessionCode: sessionCode }}
