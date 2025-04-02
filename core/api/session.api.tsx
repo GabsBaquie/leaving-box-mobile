@@ -5,6 +5,7 @@ export const Socket = io("http://10.33.69.177:3000", {
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,
   reconnectionDelayMax: 5000,
+  autoConnect: false,
 });
 
 Socket.on("connect", () => {

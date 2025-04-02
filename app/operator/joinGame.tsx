@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, Alert } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { LinearGradient } from "expo-linear-gradient";
 import NavigationButton from "@/components/NavigationButton";
@@ -8,27 +8,37 @@ import { useRouter } from "expo-router";
 
 export default function JoinGame() {
   const router = useRouter();
-  const [code, setCode] = useState(""); // État pour stocker le code saisi
+  const [code, setCode] = useState("");
 
   const joinGame = () => {
-    Socket.emit("joinSession", { sessionCode: code, operatorId: "operator1" });
-    Socket.on("playerJoined", () => {
-      console.log("playerJoined");
-      router.navigate({
-        pathname: "/agent/game",
-        params: { sessionCode: code },
-      });
-    });
-
-    setTimeout(() => {
-      Socket.emit("getSession", { sessionCode: code });
-      Socket.on("currentSession", (data) => {
-        console.log("currentSession", data);
-      });
-    }, 1000);
+    Socket.connect();
+    Socket.emit(
+      "getSession",
+      { sessionCode: code },
+      (response: { success: boolean; message?: string }) => {
+        if (response.success) {
+          Socket.emit("joinSession", {
+            sessionCode: code,
+          });
+          Socket.on("playerJoined", () => {
+            console.log("playerJoined");
+            Socket.off("playerJoined");
+            router.navigate({
+              pathname: "/agent/game",
+              params: { sessionCode: code, role: "operator" },
+            });
+          });
+        } else {
+          Alert.alert("Error while joining session", response.message);
+        }
+      }
+    );
   };
 
   const handleBack = () => {
+    Socket.off("playerJoined");
+    Socket.off("currentSession");
+    Socket.emit("leaveSession", { sessionCode: code });
     router.back();
   };
 
@@ -43,7 +53,7 @@ export default function JoinGame() {
         <Text style={styles.title}>Why do we use it?</Text>
 
         <LinearGradient
-          colors={["#66a6ff", "#89f7fe"]} // Dégradé bleu
+          colors={["#66a6ff", "#89f7fe"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.inputContainer}
