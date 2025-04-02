@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useRole } from "@/components/RoleContext";
 import {
   StyleSheet,
   ActivityIndicator,
@@ -14,14 +13,6 @@ import { ThemedView } from "@/components/ThemedView";
 export default function WaitingRoom() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-
-  const { role } = useRole();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-    return () => clearTimeout(timer);
   const { sessionCode } = useLocalSearchParams();
   const [session, setSession] = useState<any>();
 
