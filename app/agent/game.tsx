@@ -12,12 +12,15 @@ import { Socket } from "@/core/api/session.api";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import PlayerConnected from "@/components/PlayerConnected";
+import { useRole } from "@/components/RoleContext";
+
 
 export default function WaitingRoom() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const { sessionCode, maxTime, role } = useLocalSearchParams();
   const [session, setSession] = useState<any>();
+  const { role } = useRole();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -95,13 +98,21 @@ export default function WaitingRoom() {
           label="Lançer la partie"
           color="red"
         />
-        <NavigationButton
-          onPress={handleBack}
-          param={{ sessionCode: sessionCode }}
-          label="Retour"
-          color="red"
+
+      {role === "agent" && session?.connectedClients?.length > 0 && (
+        <NavigationButton 
+          href="/agent/timer" 
+          label="Go" 
+          color="red" 
         />
-      </View>
+      )}
+
+      <NavigationButton
+        onPress={handleBack}
+        param={{ sessionCode: sessionCode }}
+        label="Quitter la salle d'attente"
+        color="red"
+      />
     </ThemedView>
   );
 }
