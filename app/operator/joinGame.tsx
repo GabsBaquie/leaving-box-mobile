@@ -24,7 +24,7 @@ export default function JoinGame() {
             console.log("playerJoined");
             Socket.off("playerJoined");
             router.navigate({
-              pathname: "/agent/game",
+              pathname: "/agent/waitingRoom",
               params: { sessionCode: code, role: "operator" },
             });
           });
