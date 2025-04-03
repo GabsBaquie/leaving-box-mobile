@@ -19,6 +19,7 @@ export default function JoinGame() {
         if (response.success) {
           Socket.emit("joinSession", {
             sessionCode: code,
+            player: "Operator"
           });
           Socket.on("playerJoined", () => {
             console.log("playerJoined");
