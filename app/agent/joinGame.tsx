@@ -15,7 +15,7 @@ import { Session } from "@/core/interface/sesssion.interface";
 
 export default function JoinGame() {
   const router = useRouter();
-  const { difficulty, sessionCode } = useLocalSearchParams();
+  const { difficulty } = useLocalSearchParams();
   const [session, setSession] = useState<Session>();
   const [minutes, setMinutes] = useState("0");
   const [seconds, setSeconds] = useState("0");

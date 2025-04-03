@@ -12,6 +12,7 @@ import { Socket } from "@/core/api/session.api";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import PlayerConnected from "@/components/PlayerConnected";
+import * as Clipboard from "expo-clipboard";
 
 export default function WaitingRoom() {
   const router = useRouter();
@@ -96,7 +97,13 @@ export default function WaitingRoom() {
   return (
     <ThemedView style={styles.container}>
       <Text style={styles.title}>Salle d'attente</Text>
-      <TouchableOpacity style={styles.codeButton}>
+      <TouchableOpacity
+        style={[
+          styles.codeButton,
+          { backgroundColor: role === "agent" ? "red" : "blue" },
+        ]}
+        onPress={() => Clipboard.setStringAsync(sessionCode as string)}
+      >
         <Text style={styles.codeText}>{sessionCode}</Text>
       </TouchableOpacity>
       {isLoading ? (
@@ -116,14 +123,14 @@ export default function WaitingRoom() {
             onPress={handleNext}
             param={{ sessionCode: sessionCode }}
             label="Lancer la partie"
-            color="red"
+            color={"red"}
           />
         )}
         <NavigationButton
           onPress={handleBack}
           param={{ sessionCode: sessionCode }}
           label="Quitter la salle d'attente"
-          color="red"
+          color={role === "agent" ? "red" : "blue"}
         />
       </View>
     </ThemedView>
@@ -138,7 +145,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   codeButton: {
-    backgroundColor: "red",
     paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 5,

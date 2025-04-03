@@ -1,3 +1,4 @@
+import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import { Socket } from "@/core/api/session.api";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -50,13 +51,18 @@ export default function TimerPage() {
       { sessionCode: sessionCode },
       (res: { success: boolean }) => {
         Socket.disconnect();
-        router.back();
+        router.navigate({
+          pathname: "/agent/dificulty",
+        });
       }
     );
   };
 
   return (
     <ThemedView style={styles.container}>
+      <View style={styles.backButton}>
+        <NavigationButton color="red" label="Quitter" onPress={handleBack} />
+      </View>
       <Text style={styles.title}>Timer</Text>
       <View style={styles.codeContainer}>
         <TextInput
@@ -97,6 +103,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 50,
+  },
+  backButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    zIndex: 1,
   },
   title: {
     fontSize: 24,
