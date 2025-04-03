@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-export const Socket = io("http://10.33.69.177:3000", {
+export const Socket = io(process.env.EXPO_PUBLIC_WEBSOCKET_URL, {
   transports: ["websocket"],
   reconnectionAttempts: 5,
   reconnectionDelay: 1000,

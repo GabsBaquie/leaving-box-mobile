@@ -35,6 +35,7 @@ export default function RootLayout() {
           <Stack.Screen name="agent/timerPage" options={{ headerShown: false }}/>
 
           <Stack.Screen name="operator/joinGame" options={{ headerShown: false }} />
+          <Stack.Screen name="operator/manual" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />

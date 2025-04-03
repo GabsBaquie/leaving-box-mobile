@@ -13,7 +13,6 @@ import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import PlayerConnected from "@/components/PlayerConnected";
 
-
 export default function WaitingRoom() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +30,22 @@ export default function WaitingRoom() {
     };
 
     Socket.on("currentSession", handleCurrentSession);
+
+    Socket.on("gameStarted", (data: any) => {
+      if (role === "operator") {
+        router.navigate({
+          pathname: "/operator/manual",
+          params: {
+            sessionCode: sessionCode,
+            maxTime: maxTime,
+            role: role,
+            moduleManuals: data.moduleManuals,
+          },
+        });
+      } else {
+        console.log("Game started, but not operator");
+      }
+    });
 
     return () => {
       clearInterval(interval);
@@ -55,13 +70,19 @@ export default function WaitingRoom() {
   }, []);
 
   const handleNext = () => {
-    router.navigate({
-      pathname: "/agent/timerPage",
-      params: {
-        sessionCode: sessionCode,
-        maxTime: maxTime,
-        role: role,
-      },
+    Socket.emit("startGame", { sessionCode: sessionCode }, (res: any) => {
+      if (!res.success) {
+        Alert.alert("Erreur", res.message);
+      } else {
+        router.navigate({
+          pathname: "/agent/timerPage",
+          params: {
+            sessionCode: sessionCode,
+            maxTime: maxTime,
+            role: role,
+          },
+        });
+      }
     });
   };
 
