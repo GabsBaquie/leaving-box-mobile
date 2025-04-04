@@ -115,6 +115,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 10,
     justifyContent: "flex-start",
+    boxShadow: "-2px 5px 3px 0px rgba(0, 0, 0, 0.50)",
+
   },
   paperclip: {
     position: "absolute",
