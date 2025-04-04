@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   View,
+  Module,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Socket } from "@/core/api/session.api";
@@ -13,6 +14,7 @@ import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import PlayerConnected from "@/components/PlayerConnected";
 import * as Clipboard from "expo-clipboard";
+import { ModuleManual } from "@/core/interface/module.interface";
 
 export default function WaitingRoom() {
   const router = useRouter();
@@ -32,15 +34,17 @@ export default function WaitingRoom() {
 
     Socket.on("currentSession", handleCurrentSession);
 
-    Socket.on("gameStarted", (data: any) => {
+    Socket.on("gameStarted", (data: { moduleManuals: ModuleManual[] }) => {
       if (role === "operator") {
+        const serializedModules = JSON.stringify(data.moduleManuals);
+
         router.navigate({
           pathname: "/operator/manual",
           params: {
             sessionCode: sessionCode,
             maxTime: maxTime,
             role: role,
-            moduleManuals: data.moduleManuals,
+            moduleManuals: serializedModules,
           },
         });
       } else {

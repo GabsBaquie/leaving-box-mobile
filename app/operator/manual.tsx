@@ -1,16 +1,29 @@
+import ManualsNav from "@/components/manual/ManualsNav";
+import ModuleInstructions from "@/components/manual/ModuleInstructions";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { Socket } from "@/core/api/session.api";
+import { ModuleManual } from "@/core/interface/module.interface";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useEffect } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  Alert,
+  Dimensions,
+  Image,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
+const { width } = Dimensions.get("window");
 
 export default function Manual() {
   const router = useRouter();
   const { sessionCode, maxTime, role, moduleManuals } = useLocalSearchParams();
-  useEffect(() => {
-    console.log("Manual screen loaded");
-    console.log("Session Code:", sessionCode);
-    console.log(moduleManuals);
-  }, []);
+  const [selectedManual, setSelectedManual] = useState<ModuleManual | null>(
+    null
+  );
+  const Manuals: ModuleManual[] = JSON.parse(moduleManuals as string);
 
   useEffect(() => {
     const handleSessionCleared = (res: any) => {
@@ -36,18 +49,85 @@ export default function Manual() {
   };
 
   return (
-    <View>
-      <Text style={styles.title}>Manual</Text>
-    </View>
+    <ParallaxScrollView>
+      <View style={styles.mainContainer}>
+        <View style={styles.navContainer}>
+          {Manuals.map((manual, index) => (
+            <ManualsNav
+              key={index}
+              index={index}
+              manual={manual}
+              selectedManual={selectedManual}
+              setSelectedManual={(manual: ModuleManual) => {
+                setSelectedManual(manual);
+                console.log("Selected manual:", manual.name);
+              }}
+            />
+          ))}
+        </View>
+
+        <ImageBackground
+          source={require("../../assets/images/folder_background.png")}
+          style={styles.folderBackground}
+          resizeMode="repeat"
+        >
+          <Image
+            source={require("../../assets/images/paperclip.png")}
+            style={styles.paperclip}
+          />
+
+          <View style={styles.contentContainer}>
+            {selectedManual ? (
+              <ModuleInstructions manual={selectedManual} />
+            ) : (
+              <Text style={styles.title}>
+                Bomb Defusal Manual, for an Operator
+              </Text>
+            )}
+          </View>
+        </ImageBackground>
+      </View>
+    </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
+    flex: 1,
+    marginVertical: 60,
+  },
+  navContainer: {
+    flexDirection: "column",
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    color: "white",
     marginTop: 20,
+    marginVertical: 100,
+  },
+  folderBackground: {
+    width: width * 0.91,
+    minHeight: 700,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    justifyContent: "flex-start",
+  },
+  paperclip: {
+    position: "absolute",
+    zIndex: 1,
+    top: -20,
+    right: 10,
+    width: 100,
+    height: 100,
+    transform: [{ rotate: "12deg" }],
+    resizeMode: "contain",
+  },
+  contentContainer: {
+    backgroundColor: "white",
+    padding: 15,
   },
 });

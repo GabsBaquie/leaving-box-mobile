@@ -19,7 +19,7 @@ export default function JoinGame() {
         if (response.success) {
           Socket.emit("joinSession", {
             sessionCode: code,
-            player: "Operator"
+            player: "Operator",
           });
           Socket.on("playerJoined", () => {
             console.log("playerJoined");
@@ -40,7 +40,7 @@ export default function JoinGame() {
     Socket.off("playerJoined");
     Socket.off("currentSession");
     Socket.emit("leaveSession", { sessionCode: code });
-    router.back();
+    router.navigate("/");
   };
 
   const handleNext = () => {

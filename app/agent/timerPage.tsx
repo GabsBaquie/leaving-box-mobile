@@ -37,7 +37,6 @@ export default function TimerPage() {
     console.log("Starting timer");
     Socket.emit("startTimer", { sessionCode: sessionCode, duration: maxTime });
     Socket.on("timerUpdate", (data: any) => {
-      console.log("Timer update", data);
       handleTime(data.remaining);
     });
     Socket.on("gameOver", (data: any) => {
