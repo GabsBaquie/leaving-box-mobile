@@ -8,8 +8,10 @@ import { useEffect, useState } from "react";
 import {
   Alert,
   Dimensions,
+  FlatList,
   Image,
   ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -52,18 +54,20 @@ export default function Manual() {
     <ParallaxScrollView>
       <View style={styles.mainContainer}>
         <View style={styles.navContainer}>
-          {Manuals.map((manual, index) => (
-            <ManualsNav
-              key={index}
-              index={index}
-              manual={manual}
-              selectedManual={selectedManual}
-              setSelectedManual={(manual: ModuleManual) => {
-                setSelectedManual(manual);
-                console.log("Selected manual:", manual.name);
-              }}
-            />
-          ))}
+          <ScrollView>
+            {Manuals.map((manual, index) => (
+              <ManualsNav
+                key={index}
+                index={index}
+                manual={manual}
+                selectedManual={selectedManual}
+                length={Manuals.length}
+                setSelectedManual={(manual: ModuleManual) => {
+                  setSelectedManual(manual);
+                }}
+              />
+            ))}
+          </ScrollView>
         </View>
 
         <ImageBackground
@@ -110,13 +114,13 @@ const styles = StyleSheet.create({
     marginVertical: 100,
   },
   folderBackground: {
+    zIndex: 10,
     width: width * 0.91,
-    minHeight: 700,
+    minHeight: 650,
     paddingVertical: 20,
     paddingHorizontal: 10,
     justifyContent: "flex-start",
-    boxShadow: "-2px 5px 3px 0px rgba(0, 0, 0, 0.50)",
-
+    boxShadow: "1px 5px 3px 5px rgba(0, 0, 0, 0.50)",
   },
   paperclip: {
     position: "absolute",

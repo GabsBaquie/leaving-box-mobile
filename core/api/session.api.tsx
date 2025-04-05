@@ -1,8 +1,8 @@
 import { io } from "socket.io-client";
 
 export const Socket = io(
-  process.env.EXPO_PUBLIC_WEBSOCKET_URL,
-  // "http://192.168.1.158:3030",
+  // process.env.EXPO_PUBLIC_WEBSOCKET_URL,
+  "http://192.168.1.158:3030",
   {
     transports: ["websocket"],
     reconnectionAttempts: 5,

@@ -49,7 +49,15 @@ export default function TimerPage() {
       "clearSession",
       { sessionCode: sessionCode },
       (res: { success: boolean }) => {
+        if (!res.success) {
+          Alert.alert(
+            "Erreur",
+            "Une erreur s'est produite lors de la fermeture de la session."
+          );
+          return;
+        }
         Socket.disconnect();
+        Socket.removeAllListeners();
         router.navigate({
           pathname: "/agent/dificulty",
         });

@@ -12,8 +12,8 @@ import CodeGame from "@/components/CodeGame";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Socket } from "@/core/api/session.api";
 import { Session } from "@/core/interface/sesssion.interface";
-import SkeletonLoader from "@/components/agent-joinGame/Skeleton";
 import { LinearGradient } from "expo-linear-gradient";
+import SkeletonLoader from "@/components/agent-joinGame/SkeletonLoader";
 
 export default function JoinGame() {
   const router = useRouter();

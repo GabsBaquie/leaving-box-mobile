@@ -18,8 +18,8 @@ import { ModuleManual } from "@/core/interface/module.interface";
 
 export default function WaitingRoom() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
   const { sessionCode, maxTime, role } = useLocalSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<any>();
 
   useEffect(() => {

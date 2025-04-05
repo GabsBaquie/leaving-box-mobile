@@ -8,31 +8,25 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-const BoxShadowOptions = {
-  offsetX: 0,
-  offsetY: -10,
-  blurRadius: "15px",
-  spreadDistance: "10px",
-  color: "black",
-  inset: true,
-};
-
 export default function ManualsNav({
   manual,
   selectedManual,
   setSelectedManual,
   index,
+  length,
 }: Readonly<{
   manual: ModuleManual;
   selectedManual: ModuleManual | null;
   setSelectedManual: (manual: ModuleManual) => void;
   index: number;
+  length: number;
 }>) {
   return (
     <ThemedView
       style={[
         styles.button,
         styles.shadow,
+        { zIndex: length - index},
         selectedManual?.name === manual.name && styles.selected,
       ]}
     >
@@ -69,7 +63,7 @@ const styles = StyleSheet.create({
     boxShadow: "-2px 5px 3px 0px rgba(0, 0, 0, 0.50)",
   },
   selected: {
-    zIndex: 10,
+    zIndex: 100,
   },
 
   backgroundImage: {
