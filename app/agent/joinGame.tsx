@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from "react-native";
 import NavigationButton from "@/components/NavigationButton";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -56,9 +57,17 @@ export default function JoinGame() {
     Socket.emit(
       "clearSession",
       { sessionCode: session?.code },
-      (res: { success: boolean }) => {
+      (res: { success: boolean }) => { 
+        if (!res.success) {
+          Alert.alert(
+            "Erreur",
+            "Une erreur s'est produite lors de la fermeture de la session."
+          );
+          return;
+        }
+        Socket.removeAllListeners();
         Socket.disconnect();
-        router.back();
+        router.replace("/agent/dificulty");
       }
     );
   };

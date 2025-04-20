@@ -35,12 +35,15 @@ export default function TimerPage() {
 
   const handleTimer = () => {
     console.log("Starting timer");
-    Socket.emit("startTimer", { sessionCode: sessionCode, duration: maxTime });
+    Socket.emit("startTimer", { sessionCode: sessionCode });
     Socket.on("timerUpdate", (data: any) => {
+      console.log("Timer update", data);
       handleTime(data.remaining);
     });
     Socket.on("gameOver", (data: any) => {
-      Alert.alert("Fin de la partie", data.message);
+      Alert.alert("Fin de la partie", data.message,[
+        { text: "MENU", onPress: () => handleBack() },
+      ]);
     });
   };
 
@@ -64,6 +67,10 @@ export default function TimerPage() {
       }
     );
   };
+
+  const handleEndGame = () => {
+
+  }
 
   return (
     <ThemedView style={styles.container}>

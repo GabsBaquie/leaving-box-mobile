@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Alert,
   View,
-  Module,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Socket } from "@/core/api/session.api";

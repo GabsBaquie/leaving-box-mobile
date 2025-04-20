@@ -37,9 +37,19 @@ export default function Manual() {
     };
 
     Socket.on("sessionCleared", handleSessionCleared);
+    Socket.on("gameOver", (data: any) => {
+      Alert.alert("Fin de la partie", data.message, [
+        { text: "MENU", onPress: () => handleDisconnected() },
+      ]);
+    });
 
     return () => {
       Socket.off("sessionCleared", handleSessionCleared);
+      Socket.on("gameOver", (data: any) => {
+        Alert.alert("Fin de la partie", data.message, [
+          { text: "MENU", onPress: () => handleDisconnected() },
+        ]);
+      });
     };
   }, []);
 
