@@ -1,3 +1,4 @@
+import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import { Socket } from "@/core/api/session.api";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -27,7 +28,6 @@ export default function TimerPage() {
 
   const handleTime = (time: number) => {
     const formatted = formatTime(time);
-    // Supposons que vous ayez deux états pour minutes et seconds
     const [minutes, seconds] = formatted.split(":");
     setMinutes(minutes);
     setSeconds(seconds);
@@ -35,18 +35,48 @@ export default function TimerPage() {
 
   const handleTimer = () => {
     console.log("Starting timer");
-    Socket.emit("startTimer", { sessionCode: sessionCode, duration: maxTime });
+    Socket.emit("startTimer", { sessionCode: sessionCode });
     Socket.on("timerUpdate", (data: any) => {
+      console.log("Timer update", data);
       handleTime(data.remaining);
-      console.info("Timer update", data);
     });
     Socket.on("gameOver", (data: any) => {
-      Alert.alert("Fin de la partie", data.message);
+      Alert.alert("Fin de la partie", data.message,[
+        { text: "MENU", onPress: () => handleBack() },
+      ]);
     });
   };
 
+  const handleBack = () => {
+    Socket.emit(
+      "clearSession",
+      { sessionCode: sessionCode },
+      (res: { success: boolean }) => {
+        if (!res.success) {
+          Alert.alert(
+            "Erreur",
+            "Une erreur s'est produite lors de la fermeture de la session."
+          );
+          return;
+        }
+        Socket.disconnect();
+        Socket.removeAllListeners();
+        router.navigate({
+          pathname: "/agent/dificulty",
+        });
+      }
+    );
+  };
+
+  const handleEndGame = () => {
+
+  }
+
   return (
     <ThemedView style={styles.container}>
+      <View style={styles.backButton}>
+        <NavigationButton color="red" label="Quitter" onPress={handleBack} />
+      </View>
       <Text style={styles.title}>Timer</Text>
       <View style={styles.codeContainer}>
         <TextInput
@@ -85,7 +115,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     alignItems: "center",
+    justifyContent: "center",
     marginVertical: 50,
+  },
+  backButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    zIndex: 1,
   },
   title: {
     fontSize: 24,
@@ -94,6 +131,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
+    color: "white",
     fontSize: 18,
   },
 
