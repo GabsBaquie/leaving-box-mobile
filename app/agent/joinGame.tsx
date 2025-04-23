@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Button,
 } from "react-native";
 import NavigationButton from "@/components/NavigationButton";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -12,6 +13,9 @@ import CodeGame from "@/components/CodeGame";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Socket } from "@/core/api/session.api";
 import { Session } from "@/core/interface/sesssion.interface";
+import Description from "@/components/gameplay/description";
+import ManualScreen from "@/components/gameplay/ManualScreen";
+import CustomButton from "@/components/CustomButton";
 
 export default function JoinGame() {
   const router = useRouter();
@@ -19,6 +23,7 @@ export default function JoinGame() {
   const [session, setSession] = useState<Session>();
   const [minutes, setMinutes] = useState("0");
   const [seconds, setSeconds] = useState("0");
+  const [isManualVisible, setIsManualVisible] = useState(false);
 
   useEffect(() => {
     Socket.emit("createSession", { difficulty: difficulty });
@@ -51,11 +56,12 @@ export default function JoinGame() {
 
   const handleBack = () => {
     Socket.emit(
-      "clearSession",
+      "clearSession",     
       { sessionCode: session?.code },
       (res: { success: boolean }) => {
         Socket.disconnect();
         router.back();
+        router.replace({ pathname: "/" });
       }
     );
   };
@@ -76,17 +82,17 @@ export default function JoinGame() {
       <View style={styles.container}>
         <CodeGame code={session?.code} />
 
-        <View style={{ marginVertical: 20 }}>
-          <Text style={styles.title}>Why do we use it?</Text>
-          <Text style={styles.description}>
-            Proident est dolore ullamco cupidatat non ullamco anim. Laborum ea
-            aliquip magna deserunt qui. Elit mollit elit deserunt velit labore
-            proident adipisicing nisi esse sunt laboris. Magna eu dolore ad.
-            Aute Lorem aute tempor dolore nisi aliqua reprehenderit commodo ut
-            laborum nostrud laboris pariatur. Duis amet in minim sunt amet
-            adipisicing velit consectetur amet pariatur sunt ut.
-          </Text>
-        </View>
+        <Description />
+
+        <TouchableOpacity style={{ marginBottom: 20 }}>
+            <CustomButton onPress={() => setIsManualVisible(true)}
+             buttonText="Ouvrir le manuel" />
+        </TouchableOpacity>
+
+          <ManualScreen 
+            isVisible={isManualVisible} 
+            onClose={() => setIsManualVisible(false)} 
+          />
 
         <View style={styles.codeContainer}>
           <TextInput

@@ -20,6 +20,13 @@ export default function WaitingRoom() {
   const { sessionCode, maxTime, role } = useLocalSearchParams();
   const [session, setSession] = useState<any>();
 
+  const handleBack = () => {
+    if (role === "operator") {
+      Socket.disconnect();
+    }
+    router.back();
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       Socket.emit("getSession", { sessionCode: sessionCode });
@@ -58,18 +65,11 @@ export default function WaitingRoom() {
     router.navigate({
       pathname: "/agent/timerPage",
       params: {
-        sessionCode: sessionCode,
+        sessionCode: session?.code,
         maxTime: maxTime,
         role: role,
       },
     });
-  };
-
-  const handleBack = () => {
-    if (role === "operator") {
-      Socket.disconnect();
-    }
-    router.back();
   };
 
   return (
@@ -98,6 +98,21 @@ export default function WaitingRoom() {
             color="red"
           />
         )}
+
+        {role === "operator" && (
+          <NavigationButton
+            onPress={() =>
+              router.navigate({
+                pathname: "/operator/instruction",
+                params: { sessionCode: sessionCode },
+              })
+            }
+            param={{ sessionCode: sessionCode }}
+            label="Voir les instructions"
+            color="blue"
+          />
+        )}
+
         <NavigationButton
           onPress={handleBack}
           param={{ sessionCode: sessionCode }}
