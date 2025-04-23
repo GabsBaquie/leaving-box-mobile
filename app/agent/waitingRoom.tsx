@@ -130,20 +130,6 @@ export default function WaitingRoom() {
           />
         )}
 
-        {/* {role === "operator" && (
-          <NavigationButton
-            onPress={() =>
-              router.navigate({
-                pathname: "/operator/instruction",
-                params: { sessionCode: sessionCode },
-              })
-            }
-            param={{ sessionCode: sessionCode }}
-            label="Voir les instructions"
-            color="blue"
-          />
-        )} */}
-
         <NavigationButton
           onPress={handleBack}
           param={{ sessionCode: sessionCode }}

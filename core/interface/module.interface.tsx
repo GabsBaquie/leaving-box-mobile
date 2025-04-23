@@ -1,7 +1,7 @@
 export interface ModuleManual {
   name: string;
   description: string;
-  rules: Rules[];
+  pdfUrl?: string;
   hasLevels: boolean;
   levels?: Level[];
   defuseMethod: string;
