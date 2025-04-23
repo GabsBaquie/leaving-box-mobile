@@ -4,10 +4,7 @@ import HomeAgent from "@/components/unique/HomeAgent";
 import HomeOperator from "@/components/unique/HomeOperator";
 import { router } from "expo-router";
 
-
-
 export default function HomeScreen() {
-
   return (
     <ThemedView style={{ flex: 1 }}>
       <Image

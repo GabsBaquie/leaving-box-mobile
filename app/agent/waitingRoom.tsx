@@ -12,12 +12,13 @@ import { Socket } from "@/core/api/session.api";
 import NavigationButton from "@/components/NavigationButton";
 import { ThemedView } from "@/components/ThemedView";
 import PlayerConnected from "@/components/PlayerConnected";
-
+import * as Clipboard from "expo-clipboard";
+import { ModuleManual } from "@/core/interface/module.interface";
 
 export default function WaitingRoom() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
   const { sessionCode, maxTime, role } = useLocalSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState<any>();
 
   const handleBack = () => {
@@ -38,6 +39,24 @@ export default function WaitingRoom() {
     };
 
     Socket.on("currentSession", handleCurrentSession);
+
+    Socket.on("gameStarted", (data: { moduleManuals: ModuleManual[] }) => {
+      if (role === "operator") {
+        const serializedModules = JSON.stringify(data.moduleManuals);
+
+        router.navigate({
+          pathname: "/operator/manual",
+          params: {
+            sessionCode: sessionCode,
+            maxTime: maxTime,
+            role: role,
+            moduleManuals: serializedModules,
+          },
+        });
+      } else {
+        console.log("Game started, but not operator");
+      }
+    });
 
     return () => {
       clearInterval(interval);
@@ -62,20 +81,32 @@ export default function WaitingRoom() {
   }, []);
 
   const handleNext = () => {
-    router.navigate({
-      pathname: "/agent/timerPage",
-      params: {
-        sessionCode: session?.code,
-        maxTime: maxTime,
-        role: role,
-      },
+    Socket.emit("startGame", { sessionCode: sessionCode }, (res: any) => {
+      if (!res.success) {
+        Alert.alert("Erreur", res.message);
+      } else {
+        router.navigate({
+          pathname: "/agent/timerPage",
+          params: {
+            sessionCode: sessionCode,
+            maxTime: maxTime,
+            role: role,
+          },
+        });
+      }
     });
   };
 
   return (
     <ThemedView style={styles.container}>
       <Text style={styles.title}>Salle d'attente</Text>
-      <TouchableOpacity style={styles.codeButton}>
+      <TouchableOpacity
+        style={[
+          styles.codeButton,
+          { backgroundColor: role === "agent" ? "red" : "blue" },
+        ]}
+        onPress={() => Clipboard.setStringAsync(sessionCode as string)}
+      >
         <Text style={styles.codeText}>{sessionCode}</Text>
       </TouchableOpacity>
       {isLoading ? (
@@ -95,11 +126,11 @@ export default function WaitingRoom() {
             onPress={handleNext}
             param={{ sessionCode: sessionCode }}
             label="Lancer la partie"
-            color="red"
+            color={"red"}
           />
         )}
 
-        {role === "operator" && (
+        {/* {role === "operator" && (
           <NavigationButton
             onPress={() =>
               router.navigate({
@@ -111,13 +142,13 @@ export default function WaitingRoom() {
             label="Voir les instructions"
             color="blue"
           />
-        )}
+        )} */}
 
         <NavigationButton
           onPress={handleBack}
           param={{ sessionCode: sessionCode }}
           label="Quitter la salle d'attente"
-          color="red"
+          color={role === "agent" ? "red" : "blue"}
         />
       </View>
     </ThemedView>
@@ -132,7 +163,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   codeButton: {
-    backgroundColor: "red",
     paddingVertical: 10,
     paddingHorizontal: 30,
     borderRadius: 5,
